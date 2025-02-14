@@ -5,7 +5,7 @@ from matplotlib.offsetbox import AnchoredText
 
 def gamma(ys):
     N = len(ys)
-    result = 1 + N / np.sum(ys)
+    result = 1 + N / np.sum(np.log(ys))
     return result
 
 def calculate_statistics(bootstrap_res):
