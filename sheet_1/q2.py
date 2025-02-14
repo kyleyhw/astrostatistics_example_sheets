@@ -14,10 +14,13 @@ bootstrap_res = scipy.stats.bootstrap(data=(data,), statistic=gamma, n_resamples
 mean = np.mean(bootstrap_res.bootstrap_distribution)
 confidence_interval = (bootstrap_res.confidence_interval[0], bootstrap_res.confidence_interval[1])
 standard_error = bootstrap_res.standard_error
+cramer_rao_lower_bound = (mean - 1)**2 / len(data)
 
-info_on_ax = 'mean = ' + str() + \
+info_on_ax = 'mean = ' + str(mean) + \
              '\nconfidence interval = ' + str(confidence_interval) + \
-             '\nstandard error = ' + str(standard_error)
+             '\nstandard error = ' + str(standard_error) + \
+             '\nCRLB = ' + str(cramer_rao_lower_bound)
+
 info_fontsize = 14
 info_loc = 'upper left'
 
@@ -31,6 +34,9 @@ ax.add_artist(ax_text)
 ax.axvline(mean, c='orange')
 ax.axvline(confidence_interval[0], c='black')
 ax.axvline(confidence_interval[1], c='black')
+
+ax.set_ylabel('count')
+ax.set_xlabel(r'$\hat{\gamma}$')
 
 plt.savefig('q2_bootstrap_histogram')
 
