@@ -39,9 +39,10 @@ def plot_histogram(mean, confidence_interval, standard_error, cramer_rao_lower_b
     ax.set_ylabel('count')
     ax.set_xlabel(r'$\hat{\gamma}$')
 
-    plt.savefig('q2_bootstrap_histogram')
-
-    plt.show()
+    if save:
+        plt.savefig('q2_bootstrap_histogram')
+    if show:
+        plt.show()
 
 
 np.random.seed(seed=1)
@@ -50,4 +51,4 @@ data = np.loadtxt('ex1_data_for_problem2.txt')
 bootstrap_res = scipy.stats.bootstrap(data=(data,), statistic=gamma, n_resamples=9999)
 
 statistics = calculate_statistics(bootstrap_res=bootstrap_res)
-plot_histogram(*statistics, save=True, show=True)
+plot_histogram(*statistics, save=True, show=False)
