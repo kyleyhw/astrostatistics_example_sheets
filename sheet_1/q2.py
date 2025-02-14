@@ -1,48 +1,12 @@
-import scipy
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.offsetbox import AnchoredText
+import scipy
+from bootstrap_funcs import calculate_statistics, plot_histogram, calculate_cramer_rao_lower_bound
 
 def gamma(ys):
     N = len(ys)
     result = 1 + N / np.sum(np.log(ys))
     return result
 
-def calculate_statistics(bootstrap_res):
-    mean = np.mean(bootstrap_res.bootstrap_distribution)
-    confidence_interval = (bootstrap_res.confidence_interval[0], bootstrap_res.confidence_interval[1])
-    standard_error = bootstrap_res.standard_error
-    cramer_rao_lower_bound = (mean - 1)**2 / len(data)
-    return mean, confidence_interval, standard_error, cramer_rao_lower_bound
-
-def plot_histogram(mean, confidence_interval, standard_error, cramer_rao_lower_bound,
-                   save=True, show=False):
-    info_on_ax = 'mean = ' + str(mean) + \
-                 '\nconfidence interval = ' + str(confidence_interval) + \
-                 '\nstandard error = ' + str(standard_error) + \
-                 '\nCRLB = ' + str(cramer_rao_lower_bound)
-
-    info_fontsize = 14
-    info_loc = 'upper left'
-
-    fig, ax = plt.subplots(1, 1, figsize=(16, 9))
-
-    ax.hist(bootstrap_res.bootstrap_distribution, bins=40)
-
-    ax_text = AnchoredText(info_on_ax, loc=info_loc, frameon=False, prop=dict(fontsize=info_fontsize))
-    ax.add_artist(ax_text)
-
-    ax.axvline(mean, c='orange')
-    ax.axvline(confidence_interval[0], c='black')
-    ax.axvline(confidence_interval[1], c='black')
-
-    ax.set_ylabel('count')
-    ax.set_xlabel(r'$\hat{\gamma}$')
-
-    if save:
-        plt.savefig('q2_bootstrap_histogram')
-    if show:
-        plt.show()
 
 
 np.random.seed(seed=1)
@@ -51,4 +15,10 @@ data = np.loadtxt('sheet_1_folder_download\ex1_data_for_problem2.txt')
 bootstrap_res = scipy.stats.bootstrap(data=(data,), statistic=gamma, n_resamples=9999)
 
 statistics = calculate_statistics(bootstrap_res=bootstrap_res)
-plot_histogram(*statistics, save=True, show=False)
+mean, confidence_interval, standard_error = statistics
+cramer_rao_lower_bound = calculate_cramer_rao_lower_bound(mle=gamma(data), data=data)
+
+plot_histogram(bootstrap_res=bootstrap_res,
+               mean=mean, confidence_interval=confidence_interval, standard_error=standard_error,
+               cramer_rao_lower_bound=cramer_rao_lower_bound,
+               save=True, show=False)
