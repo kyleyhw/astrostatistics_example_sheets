@@ -47,7 +47,7 @@ def plot_histogram(mean, confidence_interval, standard_error, cramer_rao_lower_b
 
 np.random.seed(seed=1)
 
-data = np.loadtxt('ex1_data_for_problem2.txt')
+data = np.loadtxt('sheet_1_folder_download\ex1_data_for_problem2.txt')
 bootstrap_res = scipy.stats.bootstrap(data=(data,), statistic=gamma, n_resamples=9999)
 
 statistics = calculate_statistics(bootstrap_res=bootstrap_res)
